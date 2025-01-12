@@ -60,37 +60,37 @@ case $1 in
 		fi	
 	;;
 	select)
-			if [[ $2 == "input" ]]; then
-				devices=($(get_devices $2))
+		if [[ $2 == "input" ]]; then
+			devices=($(get_devices $2))
+			
+			i=0
+			for dev in "${devices[@]}"; do
+				let "i=i+1"
+				echo "$i -> $dev"
+			done
 
-				i=0
-				for dev in "${devices[@]}"; do
-					let "i=i+1"
-					echo "$i -> $dev"
-				done
+			echo ""
+			read -p "Select desired device number: " number
+			n=$((number - 1))
+			pactl set-default-source ${devices[n]}
+		elif [[ $2 == "output" ]]; then
+			devices=($(get_devices $2))
 
-				echo ""
-				read -p "Select desired device number: " number
-				n=$((number - 1))
-				pactl set-default-source ${devices[n]}
-			elif [[ $2 == "output" ]]; then
-				devices=($(get_devices $2))
-
-				i=0
-				for dev in "${devices[@]}"; do
-					let "i=i+1"
-					echo "$i -> $dev"
-				done
-				i=0
+			i=0
+			for dev in "${devices[@]}"; do
+				let "i=i+1"
+				echo "$i -> $dev"
+			done
+			i=0
 				
-				echo ""
-				read -p "Select desired device number: " number
-				n=$((number - 1))
-				pactl set-default-sink ${devices[n]}
-			else
-				echo "Incorrect Usage!"
-				usage
-			fi
+			echo ""
+			read -p "Select desired device number: " number
+			n=$((number - 1))
+			pactl set-default-sink ${devices[n]}
+		else
+			echo "Incorrect Usage!"
+			usage
+		fi
 	;;
 	*)
 		echo "Incorrect Usage!"
